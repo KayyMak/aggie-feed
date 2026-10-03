@@ -1,15 +1,16 @@
 import { Link } from 'expo-router';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useActivities } from '../context/activities';
+import { FeedError } from '../components/feed-error';
 
 export default function FeedScreen() {
-  const { activities, loading, error } = useActivities();
+  const { activities, loading, error, retry } = useActivities();
 
   if (loading) {
     return <View style={styles.centered}><ActivityIndicator accessibilityLabel="Loading activities" /></View>;
   }
   if (error) {
-    return <View style={styles.centered}><Text>{error}</Text></View>;
+    return <FeedError error={error} onRetry={retry} />;
   }
 
   return (

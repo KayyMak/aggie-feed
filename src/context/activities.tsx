@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { Activity } from '../types/activity';
+import { parseActivities } from '../utils/parse-activities';
 
 interface ActivitiesState {
   activities: Activity[];
@@ -26,9 +27,9 @@ export function ActivitiesProvider({ children }: { children: ReactNode }) {
         if (!response.ok) {
           throw new Error(`Request failed (${response.status})`);
         }
-        const data: Activity[] = await response.json();
+        const data: unknown = await response.json();
         if (!controller.signal.aborted) {
-          setActivities(data);
+          setActivities(parseActivities(data));
           setError('');
         }
       } catch (caughtError: unknown) {

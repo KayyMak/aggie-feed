@@ -26,7 +26,9 @@ export default function FeedScreen() {
             style={({ pressed }) => [styles.card, pressed && styles.pressed]}
           >
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.organization}>{item.actor.displayName}</Text>
+            {item.actor?.displayName ? (
+              <Text style={styles.organization}>{item.actor.displayName}</Text>
+            ) : null}
           </Pressable>
         </Link>
       )}

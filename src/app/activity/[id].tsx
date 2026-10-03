@@ -25,9 +25,15 @@ export default function ActivityDetails() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.title}>{activity.title}</Text>
-      <Text style={styles.organization}>{activity.actor.displayName}</Text>
-      <Text style={styles.detail}>Type: {activity.object.objectType}</Text>
-      <Text style={styles.detail}>Published: {activity.published}</Text>
+      {activity.actor?.displayName ? (
+        <Text style={styles.organization}>{activity.actor.displayName}</Text>
+      ) : null}
+      {activity.object?.objectType ? (
+        <Text style={styles.detail}>Type: {activity.object.objectType}</Text>
+      ) : null}
+      {activity.published ? (
+        <Text style={styles.detail}>Published: {activity.published}</Text>
+      ) : null}
     </ScrollView>
   );
 }

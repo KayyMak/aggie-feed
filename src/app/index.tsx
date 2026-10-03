@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   listContent: { padding: 16, paddingBottom: 32 },
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
   card: { padding: 20, borderWidth: 1, borderColor: '#9ca3af', borderRadius: 12, backgroundColor: '#fff' },
-  separator: { height: 12 },
+  separator: { height: 1, backgroundColor: '#d1d5db', marginVertical: 12 },
   pressed: { backgroundColor: '#eff6ff', borderColor: '#1d4ed8' },
   title: { fontSize: 18, lineHeight: 26, fontWeight: '600', color: '#111827', marginBottom: 8 },
   organization: { fontSize: 15, lineHeight: 22, color: '#4b5563' },

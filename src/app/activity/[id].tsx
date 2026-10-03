@@ -1,17 +1,18 @@
 import { Link, useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useActivities } from '../../context/activities';
+import { FeedError } from '../../components/feed-error';
 
 export default function ActivityDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { activities, loading, error } = useActivities();
+  const { activities, loading, error, retry } = useActivities();
   const activity = activities.find(item => item.id === id);
 
   if (loading) {
     return <View style={styles.centered}><ActivityIndicator accessibilityLabel="Loading activity" /></View>;
   }
   if (error) {
-    return <View style={styles.centered}><Text>{error}</Text></View>;
+    return <FeedError error={error} onRetry={retry} />;
   }
   if (!activity) {
     return (
@@ -25,9 +26,15 @@ export default function ActivityDetails() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.title}>{activity.title}</Text>
-      <Text style={styles.organization}>{activity.actor.displayName}</Text>
-      <Text style={styles.detail}>Type: {activity.object.objectType}</Text>
-      <Text style={styles.detail}>Published: {activity.published}</Text>
+      {activity.actor?.displayName ? (
+        <Text style={styles.organization}>{activity.actor.displayName}</Text>
+      ) : null}
+      {activity.object?.objectType ? (
+        <Text style={styles.detail}>Type: {activity.object.objectType}</Text>
+      ) : null}
+      {activity.published ? (
+        <Text style={styles.detail}>Published: {activity.published}</Text>
+      ) : null}
     </ScrollView>
   );
 }

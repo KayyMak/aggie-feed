@@ -1,10 +1,13 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import { fetchActivities } from '../api/activities';
 import type { Activity } from '../types/activity';
+import { parseActivities } from '../utils/parse-activities';
 
 interface ActivitiesState {
   activities: Activity[];
   loading: boolean;
   error: string;
+  retry: () => Promise<void>;
 }
 
 const ActivitiesContext = createContext<ActivitiesState | undefined>(undefined);
@@ -13,41 +16,44 @@ export function ActivitiesProvider({ children }: { children: ReactNode }) {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const request = useRef<AbortController | null>(null);
 
-  useEffect(() => {
+  const loadActivities = useCallback(() => {
+    request.current?.abort();
     const controller = new AbortController();
+    request.current = controller;
 
-    async function fetchActivities() {
-      try {
-        const response = await fetch(
-          'https://aggiefeed.ucdavis.edu/api/v1/activity/public?s=0&l=25',
-          { signal: controller.signal },
-        );
-        if (!response.ok) {
-          throw new Error(`Request failed (${response.status})`);
-        }
-        const data: Activity[] = await response.json();
+    return fetchActivities(controller.signal)
+      .then(data => {
         if (!controller.signal.aborted) {
-          setActivities(data);
-          setError('');
+          setActivities(parseActivities(data));
         }
-      } catch (caughtError: unknown) {
+      })
+      .catch((caughtError: unknown) => {
         if (!controller.signal.aborted) {
           setError(caughtError instanceof Error ? caughtError.message : 'Unable to load the feed.');
         }
-      } finally {
+      })
+      .finally(() => {
         if (!controller.signal.aborted) {
           setLoading(false);
         }
-      }
-    }
-
-    void fetchActivities();
-    return () => controller.abort();
+      });
   }, []);
 
+  function retry() {
+    setLoading(true);
+    setError('');
+    return loadActivities();
+  }
+
+  useEffect(() => {
+    void loadActivities();
+    return () => request.current?.abort();
+  }, [loadActivities]);
+
   return (
-    <ActivitiesContext.Provider value={{ activities, loading, error }}>
+    <ActivitiesContext.Provider value={{ activities, loading, error, retry }}>
       {children}
     </ActivitiesContext.Provider>
   );

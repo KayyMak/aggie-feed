@@ -1,11 +1,11 @@
 export interface Activity {
   id: string;
   title: string;
-  actor: {
-    displayName: string;
+  actor?: {
+    displayName?: string;
   };
-  object: {
-    objectType: string;
+  object?: {
+    objectType?: string;
   };
-  published: string;
+  published?: string;
 }

@@ -4,4 +4,8 @@ export interface Activity {
   actor: {
     displayName: string;
   };
+  object: {
+    objectType: string;
+  };
+  published: string;
 }

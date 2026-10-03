@@ -26,6 +26,8 @@ export default function ActivityDetails() {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.title}>{activity.title}</Text>
       <Text style={styles.organization}>{activity.actor.displayName}</Text>
+      <Text style={styles.detail}>Type: {activity.object.objectType}</Text>
+      <Text style={styles.detail}>Published: {activity.published}</Text>
     </ScrollView>
   );
 }
@@ -36,5 +38,6 @@ const styles = StyleSheet.create({
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
   title: { fontSize: 26, fontWeight: '700', marginBottom: 12 },
   organization: { fontSize: 17, color: '#4b5563' },
+  detail: { fontSize: 16, color: '#4b5563', marginTop: 12 },
   link: { marginTop: 16, color: '#2563eb' },
 });

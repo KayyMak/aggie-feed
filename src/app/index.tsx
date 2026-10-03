@@ -15,9 +15,11 @@ export default function FeedScreen() {
   return (
     <FlatList
       style={styles.list}
+      contentContainerStyle={styles.listContent}
       data={activities}
       keyExtractor={activity => activity.id}
-      ListEmptyComponent={<Text style={styles.card}>No activities available.</Text>}
+      ListEmptyComponent={<Text style={styles.empty}>No activities available.</Text>}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
       renderItem={({ item }) => (
         <Link href={{ pathname: '/activity/[id]', params: { id: item.id } }} asChild>
           <Pressable
@@ -29,6 +31,7 @@ export default function FeedScreen() {
             {item.actor?.displayName ? (
               <Text style={styles.organization}>{item.actor.displayName}</Text>
             ) : null}
+            <Text style={styles.action}>View details ›</Text>
           </Pressable>
         </Link>
       )}
@@ -37,10 +40,14 @@ export default function FeedScreen() {
 }
 
 const styles = StyleSheet.create({
-  list: { flex: 1, backgroundColor: '#fff' },
+  list: { flex: 1, backgroundColor: '#f3f4f6' },
+  listContent: { padding: 16, paddingBottom: 32 },
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
-  card: { padding: 20, borderBottomWidth: 1, borderBottomColor: '#e5e7eb' },
-  pressed: { backgroundColor: '#f3f4f6' },
-  title: { fontSize: 18, fontWeight: '600', marginBottom: 8 },
-  organization: { fontSize: 15, color: '#4b5563' },
+  card: { padding: 20, borderWidth: 1, borderColor: '#9ca3af', borderRadius: 12, backgroundColor: '#fff' },
+  separator: { height: 12 },
+  pressed: { backgroundColor: '#eff6ff', borderColor: '#1d4ed8' },
+  title: { fontSize: 18, lineHeight: 26, fontWeight: '600', color: '#111827', marginBottom: 8 },
+  organization: { fontSize: 15, lineHeight: 22, color: '#4b5563' },
+  action: { marginTop: 16, fontSize: 16, lineHeight: 24, fontWeight: '600', color: '#1d4ed8' },
+  empty: { padding: 24, fontSize: 16, color: '#4b5563', textAlign: 'center' },
 });

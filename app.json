@@ -3,6 +3,7 @@
     "name": "aggiefeed-app",
     "slug": "aggiefeed-app",
     "scheme": "aggiefeed",
+    "platforms": ["ios", "android"],
     "plugins": [
       "expo-router",
       "expo-status-bar"
@@ -22,9 +23,6 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }
